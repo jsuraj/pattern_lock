@@ -125,7 +125,7 @@ class _LockPainter extends CustomPainter {
     required this.pointRadius,
     required this.showInput,
     required bool fillPoints,
-  })   : circlePaint = Paint()
+  })  : circlePaint = Paint()
           ..color = notSelectedColor
           ..style = fillPoints ? PaintingStyle.fill : PaintingStyle.stroke
           ..strokeWidth = 2,
@@ -137,18 +137,60 @@ class _LockPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    final textStyle = TextStyle(
+      color: Colors.black,
+      fontSize: 30,
+    );
+    final textSpanA = TextSpan(
+      text: 'a',
+      style: textStyle,
+    );
+    final textPainterA = TextPainter(
+      text: textSpanA,
+      textDirection: TextDirection.ltr,
+    );
+    textPainterA.layout(
+      minWidth: 0,
+      maxWidth: pointRadius,
+    );
+    final textSpanP = TextSpan(
+      text: 'p',
+      style: textStyle,
+    );
+    final textPainterP = TextPainter(
+      text: textSpanP,
+      textDirection: TextDirection.ltr,
+    );
+    textPainterP.layout(
+      minWidth: 0,
+      maxWidth: pointRadius,
+    );
     Offset circlePosition(int n) =>
         calcCirclePosition(n, size, dimension, relativePadding);
 
     for (int i = 0; i < dimension; ++i) {
       for (int j = 0; j < dimension; ++j) {
-        canvas.drawCircle(
-          circlePosition(i * dimension + j),
-          pointRadius,
-          showInput && used.contains(i * dimension + j)
-              ? selectedPaint
-              : circlePaint,
-        );
+        if (i == 0 && j == 0) {
+          textPainterA.paint(
+            canvas,
+            circlePosition(i * dimension + j) -
+                Offset(pointRadius, pointRadius * 2),
+          );
+        } else if (i == 3 && j == 3 && dimension == 4) {
+          textPainterP.paint(
+            canvas,
+            circlePosition(i * dimension + j) -
+                Offset(pointRadius, pointRadius * 2),
+          );
+        } else {
+          canvas.drawCircle(
+            circlePosition(i * dimension + j),
+            pointRadius,
+            showInput && used.contains(i * dimension + j)
+                ? selectedPaint
+                : circlePaint,
+          );
+        }
       }
     }
 

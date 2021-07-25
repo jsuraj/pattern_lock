@@ -34,6 +34,7 @@ class _SetPatternState extends State<SetPattern> {
             child: PatternLock(
               selectedColor: Colors.amber,
               pointRadius: 12,
+              dimension: 4,
               onInputComplete: (List<int> input) {
                 if (input.length < 3) {
                   context.replaceSnackbar(
